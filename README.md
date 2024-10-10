@@ -1,2 +1,3 @@
-# CRM-java
-Sistema de Gestión de Usuarios en Java
+# Ejercicios de Java para CodeIntelligence
+Incluye:
+- Sistema de Gestión de Usuarios en Java.
