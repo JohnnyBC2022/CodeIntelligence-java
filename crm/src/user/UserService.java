@@ -17,4 +17,6 @@ public class UserService {
         return this.userRepository.findAll();
     }
 
+    public List<UserEntity> findById(Si)
+
 }
