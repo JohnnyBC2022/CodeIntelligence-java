@@ -13,10 +13,12 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void List<UserEntity> findAll(){
+    public List<UserEntity> findAll(){
         return this.userRepository.findAll();
     }
 
-    public List<UserEntity> findById(Si)
+    public List<UserEntity> findById(String id){
+        return null;
+    }
 
 }

@@ -2,12 +2,11 @@ package user;
 
 import user.model.UserEntity;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class UserRepository {
     private File archivoCsv;
@@ -53,6 +52,109 @@ public class UserRepository {
             return this.convertToEntityGivenId(id);
         }
         return null;
+    }
+
+    /**
+     * crea el usuario.
+     * <br>
+     * Primero verifica que no exista para insertarlo
+     * @param user
+     * @throws Exception
+     */
+    public void create(UserEntity user) throws Exception{
+        if(!verifyUserExistsInCsv(user.getId())){
+            try (FileWriter fw = new FileWriter(this.archivoCsv, true);
+                 PrintWriter pw = new PrintWriter(fw)) {
+
+                String newLine = user.getId() + "," + user.getName() + "," + user.getEmail() + "," + user.getAge();
+
+                pw.println(newLine);
+
+                System.out.println("Usuario agregado correctamente.");
+
+            } catch (IOException e) {
+                System.out.println("Ocurrió un error al escribir en el archivo: " + e.getMessage());
+            }
+        }else  throw new Exception("El usuario ya existe. Imposible volverlo a crear");
+    }
+
+    /**
+     * actualiza el usuario
+     * <br>
+     * Primero verifica que exista para borrarlo e insertar la actualizacion
+     * @param user
+     * @throws Exception
+     */
+    public void update(UserEntity user) throws Exception{
+        if(verifyUserExistsInCsv(user.getId())){
+            try (FileWriter fw = new FileWriter(this.archivoCsv, true);
+                 PrintWriter pw = new PrintWriter(fw)) {
+
+                this.delete(user.getId());
+
+
+
+                String newLine = user.getId() + "," + user.getName() + "," + user.getEmail() + "," + user.getAge();
+
+                pw.println(newLine);
+
+                System.out.println("Usuario agregado correctamente.");
+
+            } catch (IOException e) {
+                System.out.println("Ocurrió un error al escribir en el archivo: " + e.getMessage());
+            }
+        }else  throw new Exception("El usuario ya existe. Imposible volverlo a crear");
+    }
+
+    /**
+     * borra un usuario pasado por parámetro
+     * @param id
+     */
+    public void delete (String id) throws Exception{
+        if (verifyUserExistsInCsv(id)){
+            File originalFile = this.archivoCsv;
+            File tempFile = new File("C:/Users/Asus/IdeaProjects/CodeIntelligence-java/crm/src/resources/users-new.csv");
+
+            try (BufferedReader reader = new BufferedReader(new FileReader(originalFile));
+                 BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
+
+                String currentLine;
+                boolean userFound = false;
+
+                // Leer cada línea del archivo original
+                while ((currentLine = reader.readLine()) != null) {
+                    // Dividir la línea en columnas (asumiendo que está separada por comas)
+                    String[] datosUsuario = currentLine.split(",");
+
+                    // Si el ID coincide, no escribir esta línea en el archivo temporal
+                    if (Objects.equals(datosUsuario[0], id)) {
+                        userFound = true; // Usuario encontrado y no copiado
+                        continue;
+                    }
+
+                    // Escribir la línea en el archivo temporal
+                    writer.write(currentLine);
+                    writer.newLine();
+                }
+
+                if (userFound) {
+                    System.out.println("Usuario con ID " + id + " eliminado.");
+                } else {
+                    System.out.println("Usuario con ID " + id + " no encontrado.");
+                }
+
+            } catch (IOException e) {
+                System.out.println("Ocurrió un error al procesar el archivo: " + e.getMessage());
+            }
+
+            // Reemplazar el archivo original con el archivo temporal
+            try {
+                Files.delete(originalFile.toPath()); // Borrar el archivo original
+                Files.move(tempFile.toPath(), originalFile.toPath()); // Renombrar el archivo temporal como el original
+            } catch (IOException e) {
+                System.out.println("Error al reemplazar el archivo: " + e.getMessage());
+            }
+        }else throw new Exception ("El usuario no existe, y no puede ser borrado.");
     }
 
     /**

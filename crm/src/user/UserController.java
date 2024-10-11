@@ -12,6 +12,6 @@ public class UserController {
     }
 
     public List<UserDTO> findAll(){
-        return this.userService.findAll();
+        return null;
     }
 }
