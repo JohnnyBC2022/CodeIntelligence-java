@@ -26,5 +26,5 @@ public class UserRepository {
         return users;
     }
 
-    // Aquí puedes agregar métodos para actualizar y eliminar usuarios
+
 }

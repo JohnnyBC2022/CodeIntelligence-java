@@ -40,4 +40,43 @@ public class CSVHandler {
             System.out.print(parte + "  |  ");
         }
     }
+
+    public void eliminarUsuarioPorId(String id) {
+        File archivoTemporal = new File("C:\\Users\\cocoo\\Documents\\CodeIntelligence Academy\\CodeIntelligence-java\\crm\\src\\resources\\users_temp.csv");
+
+        try (BufferedReader lector = new BufferedReader(new FileReader(ficheroPath));
+             FileWriter escritor = new FileWriter(archivoTemporal)) {
+
+            String linea;
+            boolean encontrado = false;
+
+            while ((linea = lector.readLine()) != null) {
+                String[] partes = linea.split(",");
+                // Asumimos que el ID está en la primera posición (índice 0)
+                if (!partes[0].equals(id)) {
+                    escritor.write(linea + "\n"); // Escribimos la línea en el archivo temporal
+                } else {
+                    encontrado = true; // Marcamos que hemos encontrado y eliminado el usuario
+                }
+            }
+
+            if (encontrado) {
+                System.out.println("Usuario con ID " + id + " eliminado exitosamente.");
+            } else {
+                System.out.println("No se encontró un usuario con ID " + id + ".");
+            }
+        } catch (IOException e) {
+            System.out.println("Se ha producido un error al eliminar el usuario: " + e.getMessage());
+        }
+
+        // Reemplazar el archivo original con el archivo temporal
+        if (!ficheroPath.delete()) {
+            System.out.println("No se pudo eliminar el archivo original.");
+            return;
+        }
+        if (!archivoTemporal.renameTo(ficheroPath)) {
+            System.out.println("No se pudo renombrar el archivo temporal.");
+        }
+    }
+
 }

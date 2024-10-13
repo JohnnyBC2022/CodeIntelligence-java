@@ -30,4 +30,12 @@ public class UserController {
         System.out.println("Lista de usuarios:");
         userService.leerUsuarios();
     }
+
+    public void eliminarUsuario() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Ingrese el ID del usuario a eliminar:");
+        String id = scanner.nextLine();
+        userService.eliminarUsuarioPorId(id);
+    }
+
 }

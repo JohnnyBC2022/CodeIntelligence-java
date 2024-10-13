@@ -3,6 +3,8 @@ package user;
 import user.model.UserDTO;
 import util.CSVHandler;
 
+import java.util.List;
+
 public class UserService {
     private final CSVHandler csvHandler;
 
@@ -18,4 +20,11 @@ public class UserService {
     public void leerUsuarios() {
         csvHandler.leerArchivo();
     }
+
+    public void eliminarUsuarioPorId(String id) {
+        csvHandler.eliminarUsuarioPorId(id);
+    }
+
+
+
 }

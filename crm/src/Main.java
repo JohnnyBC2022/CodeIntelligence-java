@@ -13,7 +13,8 @@ public class Main {
             System.out.println("Elija una opción:");
             System.out.println("1. Crear usuario");
             System.out.println("2. Leer usuarios");
-            System.out.println("3. Salir");
+            System.out.println("3. Eliminar usuario");
+            System.out.println("4. Salir");
 
             int opcion = Integer.parseInt(scanner.nextLine());
 
@@ -22,6 +23,8 @@ public class Main {
             } else if (opcion == 2) {
                 userController.leerUsuarios();
             } else if (opcion == 3) {
+                userController.eliminarUsuario();
+            } else if (opcion == 4) {
                 System.out.println("Saliendo...");
                 break;
             } else {
