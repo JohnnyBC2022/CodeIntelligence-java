@@ -1,34 +1,43 @@
 package util;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-public abstract class CSVHandler {
-    protected abstract T parseLine (String line);
-    protected abstract String toLine(T item);
+public class CSVHandler {
+    private final File ficheroPath;
 
-    public List<T>readCSV(String filePath) throws IOException {
-        List<T> items = new ArrayList<>();
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))){
-            String line;
-            while ((line = bufferedReader.readLine()) != null){
-                items.add(parseLine(line));
-            }
-        }
-        return items;
+    public CSVHandler() {
+        this.ficheroPath = new File("C:\\Users\\cocoo\\Documents\\CodeIntelligence Academy\\CodeIntelligence-java\\crm\\src\\resources\\users.csv"); // Cambia la ruta según tu estructura
     }
 
-    public void writeCSV(String filePath, List<T> items) throws IOException {
-        try (BufferedReader bufferedReader = new BufferedReader(new FileWriter(filePath))) {
-            for (T item : items) {
-                bufferedReader.write(toLine(item));
-                bufferedReader.newLine();
-            }
+    public void writeNewUserLine(String id, String nombre, String email, int edad) {
+        try (FileWriter escribir = new FileWriter(ficheroPath, true)) { // true para agregar sin sobrescribir
+            escribir.write(id + "," + nombre + "," + email + "," + edad + "\n");
+            System.out.println("Usuario escrito en el archivo: " + id + ", " + nombre + ", " + email + ", " + edad);
+        } catch (IOException e) {
+            System.out.println("Se ha producido un error al escribir en el archivo: " + e.getMessage());
         }
     }
 
+    public void leerArchivo() {
+        try (BufferedReader lector = new BufferedReader(new FileReader(ficheroPath))) {
+            String linea;
+            while ((linea = lector.readLine()) != null) {
+                String[] partes = linea.split(",");
+                imprimirLinea(partes);
+                System.out.println();
+            }
+        } catch (IOException e) {
+            System.out.println("Se ha producido un error al leer el archivo: " + e.getMessage());
+        }
+    }
+
+    private void imprimirLinea(String[] partes) {
+        for (String parte : partes) {
+            System.out.print(parte + "  |  ");
+        }
+    }
 }

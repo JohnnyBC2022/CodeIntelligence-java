@@ -1,22 +1,21 @@
 package user;
 
-import user.model.UserEntity;
-
-import java.util.List;
+import user.model.UserDTO;
+import util.CSVHandler;
 
 public class UserService {
+    private final CSVHandler csvHandler;
 
-
-    UserRepository userRepository;
-
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserService() {
+        this.csvHandler = new CSVHandler();
     }
 
-    public void List<UserEntity> findAll(){
-        return this.userRepository.findAll();
+    public void addUser(UserDTO userDTO) {
+        // Lógica para añadir el usuario (por ejemplo, escribir en el CSV)
+        csvHandler.writeNewUserLine(userDTO.getId(), userDTO.getName(), userDTO.getEmail(), userDTO.getAge());
     }
 
-    public List<UserEntity> findById(Si)
-
+    public void leerUsuarios() {
+        csvHandler.leerArchivo();
+    }
 }
