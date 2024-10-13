@@ -13,18 +13,19 @@ public class UserRepository {
     }
 
     public void addUser(UserDTO userDTO) {
-        // Escribe el nuevo usuario en el archivo CSV
         csvHandler.writeNewUserLine(userDTO.getId(), userDTO.getName(), userDTO.getEmail(), userDTO.getAge());
     }
 
     public List<UserDTO> getAllUsers() {
         List<UserDTO> users = new ArrayList<>();
-
-        // Lógica para leer el CSV y agregar usuarios a la lista
-        // Aquí podrías utilizar csvHandler.leerArchivo() y parsear cada línea a un UserDTO
-
         return users;
     }
 
+    public void deleteUserById(String id) {
+        csvHandler.deleteUserById(id);
+    }
 
+    public void updateUserById(String id, String newName, String newEmail, int newAge) {
+        csvHandler.updateUserById(id, newName, newEmail, newAge);
+    }
 }

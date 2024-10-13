@@ -13,18 +13,22 @@ public class UserService {
     }
 
     public void addUser(UserDTO userDTO) {
-        // Lógica para añadir el usuario (por ejemplo, escribir en el CSV)
+
         csvHandler.writeNewUserLine(userDTO.getId(), userDTO.getName(), userDTO.getEmail(), userDTO.getAge());
     }
 
-    public void leerUsuarios() {
-        csvHandler.leerArchivo();
+    public void readUsers() {
+        csvHandler.readFile();
     }
 
-    public void eliminarUsuarioPorId(String id) {
-        csvHandler.eliminarUsuarioPorId(id);
+    public void deleteUserById(String id) {
+        csvHandler.deleteUserById(id);
     }
 
+    public void updateUserById(String id, String newName, String newEmail, int newAge) {
+
+        csvHandler.updateUserById(id, newName, newEmail, newAge);
+    }
 
 
 }

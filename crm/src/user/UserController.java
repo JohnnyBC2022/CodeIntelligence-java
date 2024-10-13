@@ -26,16 +26,32 @@ public class UserController {
         System.out.println("Usuario añadido exitosamente.");
     }
 
-    public void leerUsuarios() {
+    public void readUsers() {
         System.out.println("Lista de usuarios:");
-        userService.leerUsuarios();
+        userService.readUsers();
     }
 
-    public void eliminarUsuario() {
+    public void deleteUser() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Ingrese el ID del usuario a eliminar:");
         String id = scanner.nextLine();
-        userService.eliminarUsuarioPorId(id);
+        userService.deleteUserById(id);
     }
 
+    public void updateUser() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Ingrese el ID del usuario a actualizar:");
+        String id = scanner.nextLine();
+
+        System.out.println("Ingrese el nuevo nombre del usuario:");
+        String newName = scanner.nextLine();
+
+        System.out.println("Ingrese el nuevo email del usuario:");
+        String newEmail = scanner.nextLine();
+
+        System.out.println("Ingrese la nueva edad del usuario:");
+        int newAge = Integer.parseInt(scanner.nextLine());
+
+        userService.updateUserById(id, newName, newEmail, newAge);
+    }
 }

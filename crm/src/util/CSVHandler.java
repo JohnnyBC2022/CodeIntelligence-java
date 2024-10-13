@@ -7,27 +7,27 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class CSVHandler {
-    private final File ficheroPath;
+    private final File filePath;
 
     public CSVHandler() {
-        this.ficheroPath = new File("C:\\Users\\cocoo\\Documents\\CodeIntelligence Academy\\CodeIntelligence-java\\crm\\src\\resources\\users.csv"); // Cambia la ruta según tu estructura
+        this.filePath = new File("C:\\Users\\cocoo\\Documents\\CodeIntelligence Academy\\CodeIntelligence-java\\crm\\src\\resources\\users.csv");
     }
 
-    public void writeNewUserLine(String id, String nombre, String email, int edad) {
-        try (FileWriter escribir = new FileWriter(ficheroPath, true)) { // true para agregar sin sobrescribir
-            escribir.write(id + "," + nombre + "," + email + "," + edad + "\n");
-            System.out.println("Usuario escrito en el archivo: " + id + ", " + nombre + ", " + email + ", " + edad);
+    public void writeNewUserLine(String id, String name, String email, int age) {
+        try (FileWriter writer = new FileWriter(filePath, true)) {
+            writer.write(id + "," + name + "," + email + "," + age + "\n");
+            System.out.println("Usuario escrito en el archivo: " + id + ", " + name + ", " + email + ", " + age);
         } catch (IOException e) {
             System.out.println("Se ha producido un error al escribir en el archivo: " + e.getMessage());
         }
     }
 
-    public void leerArchivo() {
-        try (BufferedReader lector = new BufferedReader(new FileReader(ficheroPath))) {
-            String linea;
-            while ((linea = lector.readLine()) != null) {
-                String[] partes = linea.split(",");
-                imprimirLinea(partes);
+    public void readFile() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                printLine(parts);
                 System.out.println();
             }
         } catch (IOException e) {
@@ -35,32 +35,31 @@ public class CSVHandler {
         }
     }
 
-    private void imprimirLinea(String[] partes) {
-        for (String parte : partes) {
-            System.out.print(parte + "  |  ");
+    private void printLine(String[] parts) {
+        for (String part : parts) {
+            System.out.print(part + "  |  ");
         }
     }
 
-    public void eliminarUsuarioPorId(String id) {
-        File archivoTemporal = new File("C:\\Users\\cocoo\\Documents\\CodeIntelligence Academy\\CodeIntelligence-java\\crm\\src\\resources\\users_temp.csv");
+    public void deleteUserById(String id) {
+        File tempFile = new File("C:\\Users\\cocoo\\Documents\\CodeIntelligence Academy\\CodeIntelligence-java\\crm\\src\\resources\\users_temp.csv");
 
-        try (BufferedReader lector = new BufferedReader(new FileReader(ficheroPath));
-             FileWriter escritor = new FileWriter(archivoTemporal)) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath));
+             FileWriter writer = new FileWriter(tempFile)) {
 
-            String linea;
-            boolean encontrado = false;
+            String line;
+            boolean found = false;
 
-            while ((linea = lector.readLine()) != null) {
-                String[] partes = linea.split(",");
-                // Asumimos que el ID está en la primera posición (índice 0)
-                if (!partes[0].equals(id)) {
-                    escritor.write(linea + "\n"); // Escribimos la línea en el archivo temporal
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (!parts[0].equals(id)) {
+                    writer.write(line + "\n");
                 } else {
-                    encontrado = true; // Marcamos que hemos encontrado y eliminado el usuario
+                    found = true;
                 }
             }
 
-            if (encontrado) {
+            if (found) {
                 System.out.println("Usuario con ID " + id + " eliminado exitosamente.");
             } else {
                 System.out.println("No se encontró un usuario con ID " + id + ".");
@@ -69,14 +68,49 @@ public class CSVHandler {
             System.out.println("Se ha producido un error al eliminar el usuario: " + e.getMessage());
         }
 
-        // Reemplazar el archivo original con el archivo temporal
-        if (!ficheroPath.delete()) {
+        if (!filePath.delete()) {
             System.out.println("No se pudo eliminar el archivo original.");
             return;
         }
-        if (!archivoTemporal.renameTo(ficheroPath)) {
+        if (!tempFile.renameTo(filePath)) {
             System.out.println("No se pudo renombrar el archivo temporal.");
         }
     }
 
+    public void updateUserById(String id, String newName, String newEmail, int newAge) {
+        File tempFile = new File("C:\\Users\\cocoo\\Documents\\CodeIntelligence Academy\\CodeIntelligence-java\\crm\\src\\resources\\users_temp.csv");
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath));
+             FileWriter writer = new FileWriter(tempFile)) {
+
+            String line;
+            boolean found = false;
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts[0].equals(id)) {
+                    writer.write(id + "," + newName + "," + newEmail + "," + newAge + "\n");
+                    found = true;
+                } else {
+                    writer.write(line + "\n");
+                }
+            }
+
+            if (found) {
+                System.out.println("Usuario con ID " + id + " actualizado exitosamente.");
+            } else {
+                System.out.println("No se encontró un usuario con ID " + id + ".");
+            }
+        } catch (IOException e) {
+            System.out.println("Se ha producido un error al actualizar el usuario: " + e.getMessage());
+        }
+
+        if (!filePath.delete()) {
+            System.out.println("No se pudo eliminar el archivo original.");
+            return;
+        }
+        if (!tempFile.renameTo(filePath)) {
+            System.out.println("No se pudo renombrar el archivo temporal.");
+        }
+    }
 }
