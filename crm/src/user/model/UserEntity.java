@@ -15,7 +15,6 @@ public class UserEntity {
     private List<RoleDTO> roleList;
 
 
-
     public UserEntity(String id, String name, String email, int age, List<DepartmentDTO> departmentList, List<RoleDTO> roleList) {
         this.id = id;
         this.name = name;

@@ -1,22 +1,34 @@
 package user;
 
-import user.model.UserEntity;
+import user.model.UserDTO;
+import util.CSVHandler;
 
 import java.util.List;
 
 public class UserService {
+    private final CSVHandler csvHandler;
 
-
-    UserRepository userRepository;
-
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserService() {
+        this.csvHandler = new CSVHandler();
     }
 
-    public void List<UserEntity> findAll(){
-        return this.userRepository.findAll();
+    public void addUser(UserDTO userDTO) {
+
+        csvHandler.writeNewUserLine(userDTO.getId(), userDTO.getName(), userDTO.getEmail(), userDTO.getAge());
     }
 
-    public List<UserEntity> findById(Si)
+    public void readUsers() {
+        csvHandler.readFile();
+    }
+
+    public void deleteUserById(String id) {
+        csvHandler.deleteUserById(id);
+    }
+
+    public void updateUserById(String id, String newName, String newEmail, int newAge) {
+
+        csvHandler.updateUserById(id, newName, newEmail, newAge);
+    }
+
 
 }
