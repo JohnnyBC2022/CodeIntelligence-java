@@ -6,28 +6,26 @@ import util.CSVHandler;
 import java.util.List;
 
 public class UserService {
-    private final CSVHandler csvHandler;
+    public UserRepository userRepository;
 
     public UserService() {
-        this.csvHandler = new CSVHandler();
+        this.userRepository = new UserRepository();
     }
 
     public void addUser(UserDTO userDTO) {
-
-        csvHandler.writeNewUserLine(userDTO.getId(), userDTO.getName(), userDTO.getEmail(), userDTO.getAge());
+        this.userRepository.addUser(userDTO);
     }
 
-    public void readUsers() {
-        csvHandler.readFile();
+    public List<UserDTO> readUsers() {
+        return this.userRepository.getAllUsers();
     }
 
     public void deleteUserById(String id) {
-        csvHandler.deleteUserById(id);
+        this.userRepository.deleteUserById(id);
     }
 
-    public void updateUserById(String id, String newName, String newEmail, int newAge) {
-
-        csvHandler.updateUserById(id, newName, newEmail, newAge);
+    public void updateUserById(UserDTO user) {
+        this.userRepository.updateUserById(user);
     }
 
 
